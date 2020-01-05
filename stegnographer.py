@@ -29,6 +29,7 @@ def getmsglen(imgdata, dimensions):
     return int(colors[0]) 
 
 def getco(size, counter):
+    counter = counter*10
     x = int(counter/size[1])
     y = int(counter%size[1])
     return (x,y)
