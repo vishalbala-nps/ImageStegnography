@@ -21,19 +21,38 @@ def getpix(imgdata, x=0, y=0):
     print(colors)
     return colors
 
+def writemsglen(imgdata, length, dimensions):
+    x = int(dimensions[0])-1
+    y = int(dimensions[1])-1
+    changepix(imgdata, x=x, y=y, val=length)
+
+def getmsglen(imgdata, dimensions):
+    x = int(dimensions[0])-1
+    y = int(dimensions[1])-1
+    colors = getpix(imgdata, x=x, y=y)
+    return int(colors[0]) 
+
+
 def encryptimg(fname):
     print("Encrypt")
     try:
         img = Image.open(fname)
-        print(img.mode)
-        img_copy = img.copy()
+        if img.mode != "RGB":
+            img = img.convert('RGB')
+            print(img.mode)
+
     except:
         print("Unable to open the image! Please check the filename and the permisions and try again")
         exit(1)
 
     msg = input("Enter a message (max 255 chars):")
-    changepix(img_copy, val=100)
-    img_copy.save(fname, 'PNG')
+    msglen = len(msg)
+    if msglen > 255:
+        print("Message is greater than 255 charecters!")
+        exit(1)
+    else:
+        writemsglen(img, msglen, img.size)
+        img.save(fname, 'PNG')
     
 
 def decryptimg(fname):
@@ -44,7 +63,7 @@ def decryptimg(fname):
         print(e)
         print("Unable to open the image! Please check the filename and the permisions and try again")
         exit(1)
-    getpix(img)
+    print("Message is of length:"+str(getmsglen(img, img.size)))
 
 #Main Program Starts Here
 if len(sys.argv) != 3:
