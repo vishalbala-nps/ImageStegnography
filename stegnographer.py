@@ -32,6 +32,10 @@ def getmsglen(imgdata, dimensions):
     colors = getpix(imgdata, x=x, y=y)
     return int(colors[0]) 
 
+def getco(size, counter):
+    x = int(counter/size[1])
+    y = int(counter%size[1])
+    return (x,y)
 
 def encryptimg(fname):
     print("Encrypt")
@@ -52,15 +56,15 @@ def encryptimg(fname):
         exit(1)
     else:
         writemsglen(img, msglen, img.size)
-        yval = 0
+        counter = 0
         for i in msg:
-            changepix(img, x=0, y=yval, val=ord(i))
-            yval = yval + 1
+            xval, yval = getco(img.size, counter)
+            changepix(img, x=xval, y=yval, val=ord(i))
+            counter = counter + 1
         img.save(fname, 'PNG')
     
 
 def decryptimg(fname):
-    print("Decrypt")
     try:
         img = Image.open(fname)
     except Exception as e:
@@ -69,11 +73,12 @@ def decryptimg(fname):
         exit(1)
     msglen = getmsglen(img, img.size)
     print("Message is of length:"+str(msglen))
-    yval = 0
+    counter = 0
     msglist = []
-    while yval < msglen:
-        msglist.append(chr(getpix(img, x=0 ,y=yval)[0]))
-        yval = yval + 1
+    while counter < msglen:
+        xval, yval = getco(img.size, counter)
+        msglist.append(chr(getpix(img, x=xval ,y=yval)[0]))
+        counter = counter + 1
     smsg = "" 
     print(smsg.join(msglist))
 
