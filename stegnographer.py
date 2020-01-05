@@ -7,18 +7,14 @@ def printusage():
     exit(1)
 
 def changepix(imgdata, x=0, y=0, val=0):
-    print("Changepix:")
     r,g,b = getpix(imgdata, x, y)
     r = val
     colors = (r,g,b)
     imgdata.putpixel((x,y),colors)
-    print(imgdata.getpixel((x,y)))
 
 def getpix(imgdata, x=0, y=0):
-    print("getpix:")
     r,g,b = imgdata.getpixel((x,y))
     colors = (r,g,b)
-    print(colors)
     return colors
 
 def writemsglen(imgdata, length, dimensions):
@@ -38,12 +34,10 @@ def getco(size, counter):
     return (x,y)
 
 def encryptimg(fname):
-    print("Encrypt")
     try:
         img = Image.open(fname)
         if img.mode != "RGB":
             img = img.convert('RGB')
-            print(img.mode)
 
     except:
         print("Unable to open the image! Please check the filename and the permisions and try again")
