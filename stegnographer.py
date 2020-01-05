@@ -52,6 +52,10 @@ def encryptimg(fname):
         exit(1)
     else:
         writemsglen(img, msglen, img.size)
+        yval = 0
+        for i in msg:
+            changepix(img, x=0, y=yval, val=ord(i))
+            yval = yval + 1
         img.save(fname, 'PNG')
     
 
@@ -63,7 +67,15 @@ def decryptimg(fname):
         print(e)
         print("Unable to open the image! Please check the filename and the permisions and try again")
         exit(1)
-    print("Message is of length:"+str(getmsglen(img, img.size)))
+    msglen = getmsglen(img, img.size)
+    print("Message is of length:"+str(msglen))
+    yval = 0
+    msglist = []
+    while yval < msglen:
+        msglist.append(chr(getpix(img, x=0 ,y=yval)[0]))
+        yval = yval + 1
+    smsg = "" 
+    print(smsg.join(msglist))
 
 #Main Program Starts Here
 if len(sys.argv) != 3:
